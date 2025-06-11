@@ -1,0 +1,71 @@
+/* #pause {
+  color: rgb(255, 255, 255);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(192, 12, 12);
+  box-shadow: 8px 8px 8px rgba(150, 0, 0, 0.418);
+  border: 3px solid rgb(0, 0, 0);
+  position: absolute;
+  top: 470px;
+  left: 1547px;
+} */ 
+
+#cube {
+  color: rgb(53, 10, 97);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(26, 173, 199);
+  box-shadow: 8px 8px 8px rgba(0, 140, 255, 0.527);
+  border: none;
+  position: absolute;
+  top: 200px;
+  left: 1050px;
+}
+
+#tetrahedron {
+  color: rgb(53, 10, 97);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(26, 173, 199);
+  box-shadow: 8px 8px 8px rgba(0, 140, 255, 0.527);
+  border: none;
+  position: absolute;
+  top: 350px;
+  left: 1050px;
+}
+
+#octahedron {
+  color: rgb(53, 10, 97);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(26, 173, 199);
+  box-shadow: 8px 8px 8px rgba(0, 140, 255, 0.527);
+  border: none;
+  position: absolute;
+  top: 500px;
+  left: 1050px;
+}
+
+#icosahedron {
+  color: rgb(53, 10, 97);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(26, 173, 199);
+  box-shadow: 8px 8px 8px rgba(0, 140, 255, 0.527);
+  border: none;
+  position: absolute;
+  top: 650px;
+  left: 1050px;
+} 
+
+#dodecahedron {
+  color: rgb(53, 10, 97);
+  width: 300px;
+  height: 100px;
+  background-color: rgb(26, 173, 199);
+  box-shadow: 8px 8px 8px rgba(0, 140, 255, 0.527);
+  border: none;
+  position: absolute;
+  top: 800px;
+  left: 1050px;
+}

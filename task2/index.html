@@ -1,0 +1,43 @@
+<!--- Platonic bodies, MN7, 11.06.2025 -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="module" src="math.js"></script>
+    <script type="module" src="shaders.js"></script>
+    <script type="module" src="platon.js"></script>
+    <script type="module" src="main.js"></script>
+    <script type="module">
+      import {onStart} from "./main.js"
+      window.addEventListener("load", ()=>{onStart()});
+    </script>                                    
+    <link rel="stylesheet" href="style.css">
+  </head>               
+  <body>
+    <style>
+      /* body {
+        background-image: url('TWR_SHOT04.png');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+      } */
+    </style>
+    <span> 
+      <canvas
+      id="webgl-canvas"
+      style="border: none" width = "1000" height = "1000"
+    ></canvas>
+    <div> 
+      <button
+        id="cube" type="button">Cube</button>
+      <button
+        id="tetrahedron" type="button">Tetrahedron</button>
+      <button
+        id="octahedron" type="button">Octahedron</button>
+      <button
+        id="icosahedron" type="button">Icosahedron</button>
+      <button
+        id="dodecahedron" type="button">Dodecahedron</button>
+    </div>                                                   
+    </span>
+  </body>
+</html>
