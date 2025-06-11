@@ -22,13 +22,13 @@ function loadShader(gl, shaderStr, type) {
 
 export function initShaders(gl) {
   let vs, fs;
-  const ft1 = fetch("/vert.glsl")
+  const ft1 = fetch("./vert.glsl")
     .then((res) => res.text())
     .then((data) => {
       vs = data;
     });
 
-  const ft2 = fetch("/frag.glsl")
+  const ft2 = fetch("./frag.glsl")
     .then((res) => res.text())
     .then((data) => {
       fs = data;

@@ -20,6 +20,7 @@
   position: absolute;
   top: 200px;
   left: 1050px;
+  font-size: 30px;
 }
 
 #tetrahedron {
@@ -32,6 +33,7 @@
   position: absolute;
   top: 350px;
   left: 1050px;
+  font-size: 30px;
 }
 
 #octahedron {
@@ -43,7 +45,8 @@
   border: none;
   position: absolute;
   top: 500px;
-  left: 1050px;
+  left: 1050px;  
+  font-size: 30px;
 }
 
 #icosahedron {
@@ -55,7 +58,8 @@
   border: none;
   position: absolute;
   top: 650px;
-  left: 1050px;
+  left: 1050px;  
+  font-size: 30px;
 } 
 
 #dodecahedron {
@@ -67,5 +71,6 @@
   border: none;
   position: absolute;
   top: 800px;
-  left: 1050px;
+  left: 1050px;  
+  font-size: 30px;
 }
