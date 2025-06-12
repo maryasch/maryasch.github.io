@@ -47,16 +47,42 @@
             return Z;
         }
 
+        vec2 cmplSub( vec2 Z1, vec2 Z2 )
+        {
+            vec2 Z = vec2(Z1.x - Z2.x, Z1.y - Z2.y);
+            return Z;
+        }
+
+        vec2 cmplConj( vec2 Z )
+        {
+          vec2 Z1 = vec2(Z.x, -Z.y);
+          return Z1;
+        }
+
         vec2 cmplMult( vec2 Z1, vec2 Z2 )
         {
             vec2 Z = vec2(Z1.x * Z2.x - Z1.y * Z2.y, Z1.x * Z2.y + Z1.y * Z2.x);
             return Z;
+        }         
+            
+        vec2 cmplMultX( vec2 Z, float x )
+        {
+          vec2 Z1 = vec2(Z.x * x, Z.y * x);
+          return Z1;
         }
 
         float cmplNorm2( vec2 Z )
         {
             float a = sqrt(Z.x * Z.x + Z.y * Z.y);
             return a * a;
+        }
+
+        vec2 cmplDiv( vec2 Z1, vec2 Z2 )
+        {
+          vec2 Z = cmplMult(Z1, cmplConj(Z2));
+          Z = cmplMultX(Z, 1.0 / cmplNorm2(Z2));
+
+          return Z;
         }
 
         float cmplMandelbrot( vec2 Z )
@@ -72,15 +98,30 @@
         float cmplJulia( vec2 Z, float t )
         {
           float n = 0.0;
-          vec2 C = vec2(0.47 + 0.30 * cos(t), 0.2 + 0.3 * sin(t));
+          //vec2 C = vec2(0.47 + 0.30 * cos(t), 0.2 + 0.3 * sin(t));
+          vec2 C = vec2(0.35 + 0.02 * sin(t), 0.39 + 0.02 * sin(t));
 
           while (cmplNorm2(Z) < 4.0 && n < NumOfIterations)
           {
-            Z = cmplAdd(cmplMult(cmplMult(Z, Z), cmplMult(Z, Z)), C);
+            Z = cmplAdd(cmplMult(Z, Z), C);
             n++;
           }
           return n;
         }
+
+        float cmplNewton( vec2 Z, float t )
+        {
+          float n = 0.0;
+
+          while (cmplNorm2(Z) < 4.0 && n < NumOfIterations)
+          {
+            vec2 A = vec2(1, 0);
+            Z = cmplSub(Z, cmplDiv(cmplSub(cmplMult(cmplMult(Z, Z), Z), A), cmplMultX(cmplMult(Z, Z), 3.0)));
+            n++;
+          }
+          return n;
+        }
+
 
 
         void main() {
@@ -110,8 +151,6 @@
             float Xc = PosX, Yc = PosY;
             vec3 FinalColor;
 
-            //vec2 Z = vec2(float(X0) + xs * float(X1  - X0) / float(frame_w), float(Y0) + ys * float(Y1 - Y0) / float(frame_h));
-
             /* NewX = 2.0 * (float(Xc) + float(frame_w) / (2.0 * Zoom)) * (2.0 * xs / float(frame_w) - 1.0) / float(frame_w) - 1.0;
             NewY = 2.0 * (float(Yc) + float(frame_h) / (2.0 * Zoom)) * (2.0 * ys / float(frame_h) - 1.0) / float(frame_h) - 1.0; */
             NewX = 2.0 * (PosX + frame_w / 2.0 / Zoom * (2.0 * xs / frame_w - 1.0)) / frame_w - 1.0;
@@ -119,19 +158,15 @@
             vec2 Z = vec2(NewX, NewY);
             //n = cmplMandelbrot(Z);
 
-            n = cmplJulia(Z, 57.385 + u_time / 10.0);
+            n = cmplJulia(Z, 57.385 + u_time / 20.0);
+            //n = cmplNewton(Z, 57.385 + u_time / 10.0);
 
             //FinalColor = BackgroundColor + (FractalColor - BackgroundColor) * float(n);
-            FinalColor = mix(BackgroundColor, FractalColor, float(n) / NumOfIterations);
-            
-            //o_color = vec4(float(n) * sin(u_time * 0.30), float(n) * sin(u_time * 0.47), float(n) / sin(u_time * 0.2), 1);
-            //o_color = vec4(FractalColor.x / 255.0, float(n) * BackgroundColor.y / 255.0, float(n) * BackgroundColor.z / 255.0, 1);
-            //o_color = vec4(BackgroundColor / 255.0, 1);
-            o_color = vec4(float(n) * FinalColor.x / 255.0, float(n) * FinalColor.y / 255.0, float(n) / 255.0 * FinalColor.z, 1);
+            FinalColor = mix(vec3(float(BackgroundColor.x), float(BackgroundColor.y), float(BackgroundColor.z)),
+                             vec3(float(FractalColor.x), float(FractalColor.y), float(FractalColor.z)), float(n) / float(NumOfIterations) * 30.0);
+
+            //o_color = vec4(float(n) * FinalColor.x / 255.0, float(n) * FinalColor.y / 255.0, float(n) / 255.0 * FinalColor.z, 1);
             o_color = vec4(FinalColor, 1);
-            //o_color = vec4(n / 255.0, n / 255.0, n / 255.0, 1);
-            //o_color = vec4(sin(u_time), cos(u_time), 0.5, 1);
-            //o_color = vec4(FractalColor, 1);
         }`;
 
       const shaderVs = `#version 300 es
@@ -162,7 +197,7 @@
       let NumOfColors = 0;
       let FractalColorString, BackgroundColorString;
       let FractalColor, BackgroundColor;
-      let NumOfIterations = 255.0;
+      let NumOfIterations = 847.0;
 
       let u_time_location;
       let u_frame_w_location;
@@ -250,34 +285,31 @@
       }
 
       function onStart() {
-        /* console.log("ABC"); */
-
         let canvas = document.getElementById("webgl-canvas");
 
         canvas.onmousemove = (ev) => {
-          console.log(`mousemove(${ev.x}, ${ev.y})`);
-          MousePosX = -ev.x / FrameW;
-          MousePosY = ev.y / FrameH;
+          /* console.log(`mousemove(${ev.x}, ${ev.y})`); */
+          MousePosX = ev.clientX;
+          MousePosY = ev.clientY;
           if (MouseDown) {
             PosX -= ev.movementX / Zoom;
-            PosY += ev.movementY / Zoom; 
+            PosY += ev.movementY / Zoom;
             /* console.log(`movement(${ev.movementX}, ${ev.movementY})`);
             console.log(`center(${PosX}, ${PosY})`); */
           }
         }
 
+        canvas.onwheel = (ev) => {       
+          PosX += (MousePosX - FrameW / 2.0) / Zoom * (1.0 - 1.0 / (1.0 + ev.deltaY * 0.0005));
+          PosY -= (MousePosY - FrameH / 2.0) / Zoom * (1.0 - 1.0 / (1.0 + ev.deltaY * 0.0005));
+          Zoom *= 1 + ev.deltaY * 0.0005;
+        }
+
         canvas.onmousedown = (ev) => {
-          /* console.log(`mouse down`); */BackgroundColor
           MouseDown = true;
         }
         canvas.onmouseup = (ev) => {
-          /* console.log(`mouse up`); */
           MouseDown = false;
-        }
-
-        canvas.onwheel = (ev) => {
-          /* console.log(`wheel(${ev.deltaY})`); */
-          Zoom *= 1 + ev.deltaY * 0.0001;
         }
 
         initGL(canvas);
@@ -310,7 +342,7 @@
         <td width="50%">
         <canvas
         id="webgl-canvas"
-        style="border: none; width: 1000px; height: 1000px;"
+        style="border: none" width = "1000" height = "1000"
       ></canvas></td>
         <td>
           <div style="
@@ -324,7 +356,7 @@
             <p1 style = "font-size: x-large; width:auto;">Fractal Color</p1>
             <input type="color"
                   id="Fractal colorpicker"
-                  value="#e33132"
+                  value="#21e634"
                   style = "width: 500px; height: 300px" />
           </div>
           <div style="
@@ -338,7 +370,7 @@
             <p1 style = "font-size: x-large; width:auto;">Background Color</p1>
             <input type="color"
                   id="Background colorpicker"
-                  value="#1234e8" 
+                  value="#303030" 
                   style = "width: 500px; height: 300px" />
           </div>
           <div style="
@@ -356,7 +388,7 @@
                 name="Iterations"
                 min="1"
                 max="1000"
-                value="255"
+                value="847"
                 step="1"
                 style = "width: 500px; height: 300px;" />
           </div>
