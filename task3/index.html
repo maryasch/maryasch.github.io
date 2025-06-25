@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module">
+      import {clientAddNewUser, main} from "./client.js"
+                                          
+      let username, password;
+      window.addEventListener("load", () => {
+        document.getElementById("register button").onclick = function() {
+          username = document.getElementById("username").value;
+          password = document.getElementById("password").value;
+          console.log(username, password)
+          clientAddNewUser(username, password);
+        }
+        main();
+      });
+    </script>                                    
+  </head>               
+  <body style="background-image: url('sovietdoor.png'); background-repeat: no-repeat; background-attachment: fixed; background-size: 100% 100%;">
+    <canvas
+      id="webgl-canvas"
+      style="border: none" width = "1920" height = "1080"
+    ></canvas>
+    <p1 style="color: rgb(31, 11, 209);
+               width: 300px;
+               height: 60px;
+               font-size: 30px;
+               position: absolute;
+               top: 30px;
+               left: 600px;   
+               background-color: azure;
+               border: 3px solid black;
+               border-radius: 10px;
+               ">MN7 task3 chat</p1>
+    <form>
+      <p2 style="width: 300px;
+                 height: 100px;
+                 font-size: 30px;
+                 position: absolute;
+                 top: 300px;
+                 left: 600px;">Username:</p2>
+      <input style="width: 250px;
+                    height: 60px;
+                    font-size: 30px;
+                    position: absolute;
+                    top: 350px;
+                    left: 600px;" type="text" id="username" name="username">
+      <p3 style="width: 300px;
+                 height: 100px;
+                 font-size: 30px;
+                 position: absolute;
+                 top: 450px;
+                 left: 600px;">Password:</p3>
+      <input style="width: 250px;
+                    height: 60px;
+                    font-size: 30px;
+                    position: absolute;
+                    top: 500px;
+                    left: 600px;" type="password" id="password" name="password">
+      <button
+        style="background-color: cornflowerblue;
+               font-size: 30px;
+               color:rgb(5, 0, 36);
+               position: absolute;
+               top: 600px;
+               left: 600px;
+               width: 300px;
+               height: 60px;
+               border: 3px solid rgb(5, 0, 36);
+               border-radius: 10px;"
+        id="register button" type="button">Register right now!</button>
+    </form>
+    <p4 id="Dynamic-Text-Register" style="position: absolute; top: 800px; left: 700px; font-size: 30px;
+                                          background-color: aliceblue; border: 3px solid rgb(5, 0, 36);
+                                          border-radius: 10px;"></p4>
+  </body>
+</html>

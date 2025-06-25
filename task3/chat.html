@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module">
+      import {clientSendMessage, main, requestMessages, clientSaveHistory, clientClearHistory} from "./client.js"     
+
+      const hours = (new Date()).getHours();
+      const minutes = (new Date()).getMinutes();
+      const time = [hours, minutes];
+      
+      async function mainChat() {
+        document.getElementById("message button").onclick = function() {
+          message = document.getElementById("message").value;
+          currentUsername = localStorage.getItem("currentUsername");
+          clientSendMessage(currentUsername, message, time);
+        }
+        document.getElementById("save history button").onclick = function() {
+          clientSaveHistory();
+        }
+        document.getElementById("clear history button").onclick = function() {
+          clientClearHistory();
+        } 
+        await main();                                  
+        requestMessages();
+      }
+
+      let message, currentUsername;
+      window.addEventListener("load", () => {
+        mainChat();
+      });
+    </script>                                    
+  </head>               
+  <body style="background-image: url('sovietwall.png'); background-repeat: no-repeat; background-attachment: fixed; background-size: 100% 100%;">
+    <canvas
+      id="webgl-canvas"
+      style="border: none" width = "1920" height = "1080"
+    ></canvas>
+    <p1 style="color: rgb(0, 0, 0);
+               width: 500px;
+               height: 100px;
+               font-size: 60px;
+               position: absolute;
+               top: 30px;
+               left: 750px;
+               font-weight: bold;
+               ">Go chat bro!</p1>
+    <form>
+      <p2 style="width: 300px;
+                 height: 100px;
+                 font-size: 30px;
+                 position: absolute;
+                 top: 30px;
+                 left: 30px;">Type some hype:</p2>
+      <input style="width: 250px;
+                    height: 60px;
+                    font-size: 30px;
+                    position: absolute;
+                    top: 80px;
+                    left: 30px;" type="text" id="message" name="message">
+      <button
+        style="background-color: cornflowerblue;
+               font-size: 30px;
+               color:black;
+               position: absolute;
+               top: 150px;
+               left: 30px;
+               width: 400px;
+               height: 100px;
+               border: 3px solid black;
+               border-radius: 10px;"
+        id="message button" type="button">Send your vibe message!</button>
+    </form>
+    <li id="Dynamic-Text" style="overflow-y: scroll; position: absolute; top: 200px; left: 500px; font-size: 30px;
+                                 max-width: 800px; max-height: 600px; width: 800px; height: 600px;
+                                 background-color: rgb(100, 184, 233); list-style-type: none;"></li>
+    <button
+        style="background-color: rgb(128, 87, 202);
+               font-size: 20px;
+               color:rgb(255, 255, 255);
+               position: absolute;
+               top: 50px;
+               left: 1500px;
+               width: 400px;
+               height: 100px;
+               border: 3px solid rgb(0, 0, 0);
+               border-radius: 10px;"
+        id="save history button" type="button">Save chat history to the very wild file!</button>
+    <button
+        style="background-color: rgb(128, 87, 202);
+               font-size: 20px;
+               color:rgb(255, 255, 255);
+               position: absolute;
+               top: 180px;
+               left: 1500px;
+               width: 400px;
+               height: 100px;
+               border: 3px solid rgb(0, 0, 0);
+               border-radius: 10px;"
+        id="clear history button" type="button">Clear the whole history!</button>
+  </body>
+</html>
